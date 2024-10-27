@@ -60,7 +60,7 @@ export default function RequestPage() {
     const [medication, setMedication] = useState("");
     const [loadingQuestions, setLoadingQuestions] = useState(false);
 
-    const [currentQuestion, setCurrentQuestion] = useState(1);
+    const [currentQuestion, setCurrentQuestion] = useState(0);
 
     const [activity, setActivity] = useState("");
     const [waterConsumed, setWaterConsumed] = useState("");
@@ -69,7 +69,9 @@ export default function RequestPage() {
 
     const [step, setStep] = useState(1);
 
-    const { postQuestions } = useAPI();
+    const [specialties, setSpecialties] = useState([]);
+
+    const { postQuestions, uploadPatientData } = useAPI();
 
     function postSymptoms(symptoms: string) {
         setLoadingQuestions(true);
@@ -85,8 +87,34 @@ export default function RequestPage() {
             });
     }
 
-    function uploadAllData() {
-        // Upload all data to the server
+    async function uploadAllData() {
+        let allData = "";
+
+        questions.forEach((question, index) => {
+            const answerIndex = selectedAnswer[index];
+            const answerText =
+                answerIndex !== -1
+                    ? question.answers[answerIndex]
+                    : "No answer provided";
+
+            allData += `Question ${index + 1}: ${question.question}\n`;
+            allData += `Answer: ${answerText}\n\n`;
+        });
+
+        allData += `User medication: ${medication}\n\n`;
+
+        allData += "Additional context provided by the user:\n\n";
+        allData += `What did you do earlier?\n${activity}\n\n`;
+        allData += `How much water did you consume today?\n${waterConsumed}\n\n`;
+        allData += `What did you eat today/yesterday?\n${foodConsumed}\n\n`;
+        allData += `How well rested are you?\n${sleep}\n\n`;
+
+        console.log(allData);
+
+        const res = await uploadPatientData(allData);
+        console.log(res);
+        setSpecialties(res);
+
         setStep(2);
     }
 
