@@ -356,40 +356,42 @@ export default function RequestPage() {
                 </>
             )}
             {step === 2 && (
-                <FormCard title="Referrals" className="flex flex-col h-full space-y-4">
+                <FormCard
+                    title="Referrals"
+                    className="flex flex-col h-full space-y-4"
+                >
                     <label className="text-sm font-semibold text-stone-400">
                         We will send your referral to the following specialists.
                     </label>
-                    {
-                    specialties && specialties.map((specialty, index) => (
-                        <div className="space-y-1 w-full h-36 rounded-lg px-2 py-3 outline outline-1 outline-gray-300">
-                            <div className="flex flex-row items-center space-x-4 pb-1">
-                            <p className="text-2xl font-bold">
-                                {specialty["name"]}
-                            </p>
-                            <p className="text-lg font-semibold translate-y-0.5">
-                            {specialty["probability"] * 100}%
-                            </p>
+                    {specialties &&
+                        specialties.map((specialty) => (
+                            <div className="space-y-1 w-full h-36 rounded-lg px-2 py-3 outline outline-1 outline-gray-300">
+                                <div className="flex flex-row items-center space-x-4 pb-1">
+                                    <p className="text-2xl font-bold">
+                                        {specialty["name"]}
+                                    </p>
+                                    <p className="text-lg font-semibold translate-y-0.5">
+                                        {specialty["probability"] * 100}%
+                                    </p>
+                                </div>
+                                <div className="flex flex-row items-center">
+                                    <p className="text-sm font-bold">
+                                        Probable reason:
+                                    </p>
+                                    <p className="text-sm">
+                                        {specialty["short_reason"]}
+                                    </p>
+                                </div>
+                                <div className="flex flex-row items-center">
+                                    <p className="text-sm font-bold">
+                                        Suggestion:
+                                    </p>
+                                    <p className="text-sm">
+                                        {specialty["short_suggestion"]}
+                                    </p>
+                                </div>
                             </div>
-                            <div className="flex flex-row items-center">
-                            <p className="text-sm font-bold">
-                                Probable reason: 
-                            </p>
-                            <p className="text-sm">
-                                {specialty["short_reason"]}
-                            </p>
-                            </div>
-                            <div className="flex flex-row items-center">
-                            <p className="text-sm font-bold">
-                                Suggestion: 
-                            </p>
-                            <p className="text-sm">
-                                {specialty["short_suggestion"]}
-                            </p>
-                            </div>
-                        </div>
-                    ))
-                    }
+                        ))}
                 </FormCard>
             )}
         </div>
