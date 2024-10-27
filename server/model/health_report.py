@@ -9,7 +9,6 @@ class HealthReport(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     report_text = Column(String(512), nullable=True)
     file_path = Column(String(255), nullable=False)
-    file_name = Column(String(255), nullable=False)
 
     user_id = Column(String(255), ForeignKey("users.id"), nullable=False)
     user = relationship(User)

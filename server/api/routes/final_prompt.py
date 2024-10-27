@@ -20,22 +20,29 @@ from model.answers import Answer
 from model.context import Context
 from model.health_report import HealthReport
 from data.database import get_db_session
+from fastapi.exceptions import HTTPException
+
+from api.services.user_service import get_or_create_user
 
 logger = logging.getLogger(__name__)
-router = APIRouter(prefix="/api/prompting", tags=["Prompting"], include_in_schema=False)
+router = APIRouter(prefix="/api/finalprompting", tags=["Prompting"], include_in_schema=False)
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 INFERENCE_LINK = "https://inference.ccrolabs.com/api/generate"
 
-@router.get("/final_prompt")
-def get_referrals(token = Depends(oauth2_scheme), db_session = Depends(get_db_session)):
-    
-    user = db_session.query(User).filter(User.id == token).first()
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+class BodyAnswers(BaseModel):
+    answers: str
 
-    answers = ' '.join([answer.answer_text for answer in db_session.query(Answer).filter(Answer.user_id == token).all()])
+@router.post("/")
+def get_referrals(bodyanswers: BodyAnswers, token = Depends(oauth2_scheme), db_session = Depends(get_db_session)):
+    get_or_create_user(token, db_session)
+
+    user = db_session.query(User).filter(User.id == token).first()
+
+    answers = bodyanswers.answers
+
+    answers += ' '.join([answer.answer_text for answer in db_session.query(Answer).filter(Answer.user_id == token).all()])
     contexts = ' '.join([context.text for context in db_session.query(Context).filter(Context.user_id == token).all()])
     google_fit_names = ' '.join([google_report.parameter_name for google_report in db_session.query(GoogleFit).filter(GoogleFit.user_id == token).all()])
     google_fit_values = ' '.join([google_report.parameter_value for google_report in db_session.query(GoogleFit).filter(GoogleFit.user_id == token).all()])
@@ -46,22 +53,17 @@ def get_referrals(token = Depends(oauth2_scheme), db_session = Depends(get_db_se
 
 
     PROMPT = """
+    You are a helpful assistant specialized in the medical field.
 Predict the three most probable medical specialties where a patient should seek consultation.
 Patient Information:
 Symptoms:""" + symptoms + """
-List the current symptoms reported by the patient.
 Questions: """ + questions + """
 Answers: """ + answers + """
-List the additional questions and answers to understand the sympoms better
 Medication:""" + medicamentations + """
-List current medications, including dosage and frequency. If none, state "None".
 Recent Context: """ + contexts + """
-Describe any recent lifestyle changes, significant events, or environmental factors affecting the patient. If none, state "None".
 Google Fitness Parameter Names: """ + google_fit_names + """
 Google Fitness Parameter Values: """ + google_fit_values + """
-Provide detailed fitness metrics such as average daily steps, sleep quality scores, heart rate variability, etc. If unavailable, state "None".
 Medical History: """ + health_reports + """
-Summarize the patient's medical history, including past diagnoses, procedures, and relevant medical documents. If unavailable, state "None".
 Response Format:
 Provide a JSON array with three objects, each representing a medical specialty recommendation. Each object should include:
 name: (string) The name of the medical specialty.
@@ -75,28 +77,19 @@ Medication: metformin for diabetes management
 Recent Context: recently returned from a high-altitude trip, experiencing increased stress due to work changes
 Google Fitness Data: irregular sleep patterns with an average of 5 hours per night, resting heart rate of 72 bpm, blood pressure fluctuating between 120/80 and 140/90 mmHg, regular daily activity with moderate exercise, normal oxygen saturation levels, balanced nutrition, and average body temperature
 Medical History: previous diagnosis of mild anemia, recent MRI showing slight brain white matter changes
-
-[
+The response should have the following json format, and only respond like it. All responses should be in valid json format.
+{
+    "specialties": [
     {
-        "name": "Endocrinology",
-        "probability": float
-        "short_reason": "Symptoms of fatigue and joint pain may be related to diabetes management.",
-        "short_suggestion": "Consult an endocrinologist to evaluate blood sugar levels and diabetes control."
+        "name": "str",
+        "probability": "float"
+        "short_reason": "str"
+        "short_suggestion": "str"
     },
-    {
-        "name": "Neurology",
-        "probability": float,
-        "short_reason": "MRI findings and symptoms like dizziness and blurred vision suggest neurological evaluation.",
-        "short_suggestion": "Seek a neurologist for further assessment of brain white matter changes."
-    },
-    {
-        "name": "Rheumatology",
-        "probability": float
-        "short_reason": "Intermittent joint pain may indicate an underlying rheumatologic condition.",
-        "short_suggestion": "Consider consulting a rheumatologist to investigate potential autoimmune disorders."
-    }
-]
-
+    ]
+}
+Remember to respond always with 3 possibilities sorted by probability!
+If the patient could have the problem from a bad lifestyle or recent lifestyle changes found in the google fit data or the answers to the questions, please include that option.
     """
     headers = {
         "Content-Type": "application/json"
