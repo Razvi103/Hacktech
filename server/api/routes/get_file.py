@@ -54,7 +54,7 @@ def get_health_report(file_path: str, file_name: str, db=Depends(get_db_session)
 
 @router.post("/get-all-files/", response_model=List[HealthReportResponse])
 def get_all_files(token: str, db=Depends(get_db_session)):
-    reports = db.query(HealthReport).filter_by(user_id=token).all()
+    reports = db.query(HealthReport).filter_by(HealthReport.user_id == token).all()
     reports_json = []
     for report in reports:
         report_json = {
