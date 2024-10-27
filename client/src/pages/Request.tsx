@@ -23,16 +23,16 @@ function Question({
     onChange,
 }: QuestionProps) {
     return (
-        <div className='flex flex-col'>
-            <p className='py-5'>{question}</p>
-            <div className='flex flex-col gap-2'>
+        <div className="flex flex-col">
+            <p className="py-5">{question}</p>
+            <div className="flex flex-col gap-2">
                 {answers.map((answer, index) => (
                     <div
                         key={index}
-                        className='flex flex-row gap-4 items-center'
+                        className="flex flex-row gap-4 items-center"
                     >
                         <input
-                            type='radio'
+                            type="radio"
                             id={`answer_${index}`}
                             value={answer}
                             checked={selectedAnswer === index}
@@ -91,13 +91,13 @@ export default function RequestPage() {
     }
 
     return (
-        <div className='flex flex-col gap-6 px-6'>
-            <div className='flex flex-row items-center gap-6'>
+        <div className="flex flex-col gap-6 px-6">
+            <div className="flex flex-row items-center gap-6">
                 <button
                     onClick={() => setStep(1)}
-                    className='aspect-square flex justify-center items-center rounded-full bg-emerald-400 h-[3.5rem] w-[3.5rem]'
+                    className="aspect-square flex justify-center items-center rounded-full bg-emerald-400 h-[3.5rem] w-[3.5rem]"
                 >
-                    <p className='text-2xl text-bold text-white font-black'>
+                    <p className="text-2xl text-bold text-white font-black">
                         1
                     </p>
                 </button>
@@ -112,7 +112,7 @@ export default function RequestPage() {
                         " aspect-square flex justify-center items-center rounded-full h-[3.5rem] w-[3.5rem]"
                     }
                 >
-                    <p className='text-2xl text-bold text-white font-black'>
+                    <p className="text-2xl text-bold text-white font-black">
                         2
                     </p>
                 </button>
@@ -126,46 +126,46 @@ export default function RequestPage() {
             </div>
             {step === 1 && (
                 <>
-                    <FormCard title='Document section'>
-                        <input type='file' name='file' multiple />
-                        <label htmlFor='file'>Choose a file</label>
+                    <FormCard title="Document section">
+                        <input type="file" name="file" multiple />
+                        <label htmlFor="file">Choose a file</label>
                     </FormCard>
 
-                    <div className='flex flex-row gap-6'>
-                        <div className='flex flex-col flex-1 gap-6'>
-                            <FormCard title='Context'>
-                                <p className='text-sm font-semibold text-stone-400 pb-5'>
+                    <div className="flex flex-row gap-6">
+                        <div className="flex flex-col flex-1 gap-6">
+                            <FormCard title="Context">
+                                <p className="text-sm font-semibold text-stone-400 pb-5">
                                     If possible, please provide some context to
                                     your current state.
                                 </p>
-                                <div className='flex flex-col gap-6'>
+                                <div className="flex flex-col gap-6">
                                     <Input
-                                        id='activity-q'
-                                        label='What did you do earlier?'
+                                        id="activity-q"
+                                        label="What did you do earlier?"
                                         value={activity}
                                         onChange={(val) =>
                                             setActivity(val as string)
                                         }
                                     />
                                     <Input
-                                        id='water-q'
-                                        label='Have much water did you consume today?'
+                                        id="water-q"
+                                        label="Have much water did you consume today?"
                                         value={waterConsumed}
                                         onChange={(val) =>
                                             setWaterConsumed(val as string)
                                         }
                                     />
                                     <Input
-                                        id='food-q'
-                                        label='What did you eat today/yesterday?'
+                                        id="food-q"
+                                        label="What did you eat today/yesterday?"
                                         value={foodConsumed}
                                         onChange={(val) =>
                                             setFoodConsumed(val as string)
                                         }
                                     />
                                     <Input
-                                        id='sleep-q'
-                                        label='How well rested are you?'
+                                        id="sleep-q"
+                                        label="How well rested are you?"
                                         value={sleep}
                                         onChange={(val) =>
                                             setSleep(val as string)
@@ -174,40 +174,40 @@ export default function RequestPage() {
                                 </div>
                             </FormCard>
 
-                            <FormCard title='Medication section'>
+                            <FormCard title="Medication section">
                                 <Input
                                     value={medication}
                                     onChange={(value) =>
                                         setMedication(value as string)
                                     }
-                                    id='medication'
-                                    label='Medication'
+                                    id="medication"
+                                    label="Medication"
                                     textarea
                                     rows={4}
                                 />
 
-                                <p className='text-sm font-semibold text-stone-400 pt-4'>
+                                <p className="text-sm font-semibold text-stone-400 pt-4">
                                     Please enter your current medication
                                     treatment
                                 </p>
                             </FormCard>
                         </div>
-                        <div className='flex flex-col gap-6 flex-1'>
+                        <div className="flex flex-col gap-6 flex-1">
                             <FormCard
-                                title='Symptoms section'
-                                className='flex-1 flex flex-col'
+                                title="Symptoms section"
+                                className="flex-1 flex flex-col"
                             >
                                 <Input
-                                    id='base-symptom'
-                                    label='What are your symptoms?'
+                                    id="base-symptom"
+                                    label="What are your symptoms?"
                                     value={baseSymptom}
                                     onChange={(value) =>
                                         setBaseSymptom(value as string)
                                     }
                                 />
 
-                                <div className='flex flex-row justify-between items-center py-4'>
-                                    <label className='text-sm font-semibold text-stone-400'>
+                                <div className="flex flex-row justify-between items-center py-4">
+                                    <label className="text-sm font-semibold text-stone-400">
                                         The quality of your answers will
                                         determine the accuracy of the results.
                                     </label>
@@ -216,24 +216,24 @@ export default function RequestPage() {
                                             postSymptoms(baseSymptom);
                                         }}
                                         outlined
-                                        styleType='success'
+                                        styleType="success"
                                     >
                                         Send
                                     </Button>
                                 </div>
 
                                 {questions.length === 0 ? (
-                                    <div className='border border-stone-400 text-stone-400 rounded-lg flex justify-center items-center flex-1'>
+                                    <div className="border border-stone-400 text-stone-400 rounded-lg flex justify-center items-center flex-1">
                                         {loadingQuestions
                                             ? "Preparing follow-up questions..."
                                             : "Please enter your symptoms in order to get follow-up questions."}
                                     </div>
                                 ) : (
                                     <>
-                                        <h3 className='text-xl font-bold text-stone-700 pb-6'>
+                                        <h3 className="text-xl font-bold text-stone-700 pb-6">
                                             Follow-up Questions
                                         </h3>
-                                        <div className='flex flex-row justify-between items-center'>
+                                        <div className="flex flex-row justify-between items-center">
                                             <button
                                                 onClick={() => {
                                                     setCurrentQuestion(
@@ -248,11 +248,11 @@ export default function RequestPage() {
                                                         : "hover:bg-zinc-200")
                                                 }
                                             >
-                                                <span className='material-symbols-rounded text-[2.25rem]'>
+                                                <span className="material-symbols-rounded text-[2.25rem]">
                                                     navigate_before
                                                 </span>
                                             </button>
-                                            <p className='text-md font-medium'>
+                                            <p className="text-md font-medium">
                                                 Question {currentQuestion + 1}{" "}
                                                 of {questions.length}
                                             </p>
@@ -274,7 +274,7 @@ export default function RequestPage() {
                                                         : "hover:bg-zinc-200")
                                                 }
                                             >
-                                                <span className='material-symbols-rounded text-[2.25rem]'>
+                                                <span className="material-symbols-rounded text-[2.25rem]">
                                                     navigate_next
                                                 </span>
                                             </button>
@@ -306,17 +306,17 @@ export default function RequestPage() {
                                     </>
                                 )}
                             </FormCard>
-                            <FormCard title='Get referral'>
-                                <p className='text-sm font-semibold text-stone-400 pt-4'>
+                            <FormCard title="Get referral">
+                                <p className="text-sm font-semibold text-stone-400 pt-4">
                                     If you feel that you have answered all the
                                     necessary questions with the most ammount of
                                     detail, and accuracy, please proceed to the
                                     next step in order to get the referrals.
                                 </p>
-                                <div className='flex flex-row justify-end pt-2'>
+                                <div className="flex flex-row justify-end pt-2">
                                     <Button
                                         onClick={uploadAllData}
-                                        styleType='primary'
+                                        styleType="primary"
                                     >
                                         Get referral
                                     </Button>
@@ -327,8 +327,8 @@ export default function RequestPage() {
                 </>
             )}
             {step === 2 && (
-                <FormCard title='Referrals' className='h-full'>
-                    <label className='text-sm font-semibold text-stone-400'>
+                <FormCard title="Referrals" className="h-full">
+                    <label className="text-sm font-semibold text-stone-400">
                         We will send your referral to the following specialist.
                     </label>
                 </FormCard>

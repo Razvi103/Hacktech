@@ -1,6 +1,9 @@
 // import { useContext } from "react";
 // import UserContext from "../store/UserContext.tsx";
 
+import { useContext } from "react";
+import UserContext from "../store/UserContext";
+
 export const BACKEND_URL =
     "https://hacktech-backend-296479925771.europe-west4.run.app";
 
@@ -27,6 +30,8 @@ const useAPI = () => {
     //     }
     // };
 
+    const { token } = useContext(UserContext);
+
     const postQuestions = async (symptoms: string) => {
         const response = await fetch(`${BACKEND_URL}/api/prompting/questions`, {
             method: "POST",
@@ -38,8 +43,23 @@ const useAPI = () => {
         return data;
     };
 
+    const uploadPatientData = async (prompt: string) => {
+        const response = await fetch(`${BACKEND_URL}/api/finalprompting/`, {
+            method: "POST",
+            body: JSON.stringify({ answers: prompt }),
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        const data = await response.json();
+        console.log(data);
+        return data;
+    };
+
     return {
         postQuestions,
+        uploadPatientData,
     };
 };
 
