@@ -4,6 +4,7 @@ import Button from "../components/UI/Button";
 import FormCard from "../components/FormCard";
 import useAPI from "../api/HealthAPI";
 
+
 type QuestionType = {
     question: string;
     answers: string[];
@@ -117,6 +118,12 @@ export default function RequestPage() {
         console.log(specialties);
 
         setStep(2);
+    }
+
+    function search_google(query: string) {
+        const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(query + " specialists near me")}`;
+        
+        window.location.href = googleSearchUrl;
     }
 
     return (
@@ -365,7 +372,8 @@ export default function RequestPage() {
                     </label>
                     {specialties &&
                         specialties.map((specialty) => (
-                            <div className="space-y-1 w-full h-36 rounded-lg px-2 py-3 outline outline-1 outline-gray-300">
+                            <div className="flex flex-row rounded-lg outline outline-1 outline-gray-300">
+                            <div className="space-y-1 w-full h-h-36 rounded-lg px-2 py-3">
                                 <div className="flex flex-row items-center space-x-4 pb-1">
                                     <p className="text-2xl font-bold">
                                         {specialty["name"]}
@@ -374,7 +382,7 @@ export default function RequestPage() {
                                         {specialty["probability"] * 100}%
                                     </p>
                                 </div>
-                                <div className="flex flex-row items-center">
+                                <div className="flex flex-row items-center space-x-1">
                                     <p className="text-sm font-bold">
                                         Probable reason:
                                     </p>
@@ -382,7 +390,7 @@ export default function RequestPage() {
                                         {specialty["short_reason"]}
                                     </p>
                                 </div>
-                                <div className="flex flex-row items-center">
+                                <div className="flex flex-row items-center space-x-1">
                                     <p className="text-sm font-bold">
                                         Suggestion:
                                     </p>
@@ -390,6 +398,17 @@ export default function RequestPage() {
                                         {specialty["short_suggestion"]}
                                     </p>
                                 </div>
+                            </div>
+                            <button className="flex h-full w-[20%] items-center justify-center" onClick={
+                                () => {
+                                  search_google(specialty["name"])  
+                                }
+                            }>
+
+                            <span className="material-symbols-rounded text-6xl">
+                                                    location_searching
+                            </span>
+                            </button>
                             </div>
                         ))}
                 </FormCard>
