@@ -9,7 +9,7 @@
 .input-field textarea {
     padding: 16px;
     border-radius: 8px;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     outline: none;
     font-size: 16px;
     font-family: "Lufga", sans-serif;
@@ -20,7 +20,6 @@
     top: 50%;
     left: 16px;
     transform: translateY(-50%);
-    color: black;
     font-size: 16px;
     font-family: "Lufga", sans-serif;
     background-color: white;

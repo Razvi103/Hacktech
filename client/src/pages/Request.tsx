@@ -126,137 +126,13 @@ export default function RequestPage() {
             </div>
             {step === 1 && (
                 <>
-                    <FormCard title='Document section'>File input</FormCard>
+                    <FormCard title='Document section'>
+                        <input type='file' name='file' multiple />
+                        <label htmlFor='file'>Choose a file</label>
+                    </FormCard>
 
                     <div className='flex flex-row gap-6'>
-                        <FormCard
-                            title='Symptoms section'
-                            className='flex-1 flex flex-col'
-                        >
-                            <Input
-                                id='base-symptom'
-                                label='What are your symptoms?'
-                                value={baseSymptom}
-                                onChange={(value) =>
-                                    setBaseSymptom(value as string)
-                                }
-                            />
-
-                            <div className='flex flex-row justify-between items-center py-4'>
-                                <label className='text-sm font-semibold text-stone-400'>
-                                    The quality of your answers will determine
-                                    the accuracy of the results.
-                                </label>
-                                <Button
-                                    onClick={() => {
-                                        postSymptoms(baseSymptom);
-                                    }}
-                                    outlined
-                                    styleType='success'
-                                >
-                                    Send
-                                </Button>
-                            </div>
-
-                            {questions.length === 0 ? (
-                                <div className='border border-stone-400 text-stone-400 rounded-lg flex justify-center items-center flex-1'>
-                                    {loadingQuestions
-                                        ? "Preparing follow-up questions..."
-                                        : "Please enter your symptoms in order to get follow-up questions."}
-                                </div>
-                            ) : (
-                                <>
-                                    <h3 className='text-xl font-bold text-stone-700 pb-6'>
-                                        Follow-up Questions
-                                    </h3>
-                                    <div className='flex flex-row justify-between items-center'>
-                                        <button
-                                            onClick={() => {
-                                                setCurrentQuestion(
-                                                    currentQuestion - 1
-                                                );
-                                            }}
-                                            disabled={currentQuestion === 0}
-                                            className={
-                                                "flex justify-center items-center rounded-full " +
-                                                (currentQuestion === 0
-                                                    ? "text-zinc-400"
-                                                    : "hover:bg-zinc-200")
-                                            }
-                                        >
-                                            <span className='material-symbols-rounded text-[2.25rem]'>
-                                                navigate_before
-                                            </span>
-                                        </button>
-                                        <p className='text-md font-medium'>
-                                            Question {currentQuestion + 1} of{" "}
-                                            {questions.length}
-                                        </p>
-                                        <button
-                                            onClick={() => {
-                                                setCurrentQuestion(
-                                                    currentQuestion + 1
-                                                );
-                                            }}
-                                            disabled={
-                                                currentQuestion ===
-                                                questions.length - 1
-                                            }
-                                            className={
-                                                "flex justify-center items-center rounded-full " +
-                                                (currentQuestion ===
-                                                questions.length - 1
-                                                    ? "text-zinc-400"
-                                                    : "hover:bg-zinc-200")
-                                            }
-                                        >
-                                            <span className='material-symbols-rounded text-[2.25rem]'>
-                                                navigate_next
-                                            </span>
-                                        </button>
-                                    </div>
-                                    <Question
-                                        selectedAnswer={
-                                            selectedAnswer[currentQuestion]
-                                        }
-                                        question={
-                                            questions[currentQuestion].question
-                                        }
-                                        answers={
-                                            questions[currentQuestion].answers
-                                        }
-                                        onChange={(answerIndex) =>
-                                            setSelectedAnswer((prev) => {
-                                                const newAnswers = [...prev];
-                                                newAnswers[currentQuestion] =
-                                                    answerIndex;
-                                                return newAnswers;
-                                            })
-                                        }
-                                    />
-                                </>
-                            )}
-                        </FormCard>
-
                         <div className='flex flex-col flex-1 gap-6'>
-                            <FormCard title='Medication section'>
-                                <Input
-                                    value={medication}
-                                    onChange={(value) =>
-                                        setMedication(value as string)
-                                    }
-                                    id='medication'
-                                    label='Medication'
-                                    textarea
-                                    rows={4}
-                                />
-
-                                <p className='text-sm font-semibold text-stone-400 pt-4'>
-                                    Please enter your current medication
-                                    treatment
-                                </p>
-                            </FormCard>
-
                             <FormCard title='Context'>
                                 <p className='text-sm font-semibold text-stone-400 pb-5'>
                                     If possible, please provide some context to
@@ -295,6 +171,155 @@ export default function RequestPage() {
                                             setSleep(val as string)
                                         }
                                     />
+                                </div>
+                            </FormCard>
+
+                            <FormCard title='Medication section'>
+                                <Input
+                                    value={medication}
+                                    onChange={(value) =>
+                                        setMedication(value as string)
+                                    }
+                                    id='medication'
+                                    label='Medication'
+                                    textarea
+                                    rows={4}
+                                />
+
+                                <p className='text-sm font-semibold text-stone-400 pt-4'>
+                                    Please enter your current medication
+                                    treatment
+                                </p>
+                            </FormCard>
+                        </div>
+                        <div className='flex flex-col gap-6 flex-1'>
+                            <FormCard
+                                title='Symptoms section'
+                                className='flex-1 flex flex-col'
+                            >
+                                <Input
+                                    id='base-symptom'
+                                    label='What are your symptoms?'
+                                    value={baseSymptom}
+                                    onChange={(value) =>
+                                        setBaseSymptom(value as string)
+                                    }
+                                />
+
+                                <div className='flex flex-row justify-between items-center py-4'>
+                                    <label className='text-sm font-semibold text-stone-400'>
+                                        The quality of your answers will
+                                        determine the accuracy of the results.
+                                    </label>
+                                    <Button
+                                        onClick={() => {
+                                            postSymptoms(baseSymptom);
+                                        }}
+                                        outlined
+                                        styleType='success'
+                                    >
+                                        Send
+                                    </Button>
+                                </div>
+
+                                {questions.length === 0 ? (
+                                    <div className='border border-stone-400 text-stone-400 rounded-lg flex justify-center items-center flex-1'>
+                                        {loadingQuestions
+                                            ? "Preparing follow-up questions..."
+                                            : "Please enter your symptoms in order to get follow-up questions."}
+                                    </div>
+                                ) : (
+                                    <>
+                                        <h3 className='text-xl font-bold text-stone-700 pb-6'>
+                                            Follow-up Questions
+                                        </h3>
+                                        <div className='flex flex-row justify-between items-center'>
+                                            <button
+                                                onClick={() => {
+                                                    setCurrentQuestion(
+                                                        currentQuestion - 1
+                                                    );
+                                                }}
+                                                disabled={currentQuestion === 0}
+                                                className={
+                                                    "flex justify-center items-center rounded-full " +
+                                                    (currentQuestion === 0
+                                                        ? "text-zinc-400"
+                                                        : "hover:bg-zinc-200")
+                                                }
+                                            >
+                                                <span className='material-symbols-rounded text-[2.25rem]'>
+                                                    navigate_before
+                                                </span>
+                                            </button>
+                                            <p className='text-md font-medium'>
+                                                Question {currentQuestion + 1}{" "}
+                                                of {questions.length}
+                                            </p>
+                                            <button
+                                                onClick={() => {
+                                                    setCurrentQuestion(
+                                                        currentQuestion + 1
+                                                    );
+                                                }}
+                                                disabled={
+                                                    currentQuestion ===
+                                                    questions.length - 1
+                                                }
+                                                className={
+                                                    "flex justify-center items-center rounded-full " +
+                                                    (currentQuestion ===
+                                                    questions.length - 1
+                                                        ? "text-zinc-400"
+                                                        : "hover:bg-zinc-200")
+                                                }
+                                            >
+                                                <span className='material-symbols-rounded text-[2.25rem]'>
+                                                    navigate_next
+                                                </span>
+                                            </button>
+                                        </div>
+                                        <Question
+                                            selectedAnswer={
+                                                selectedAnswer[currentQuestion]
+                                            }
+                                            question={
+                                                questions[currentQuestion]
+                                                    .question
+                                            }
+                                            answers={
+                                                questions[currentQuestion]
+                                                    .answers
+                                            }
+                                            onChange={(answerIndex) =>
+                                                setSelectedAnswer((prev) => {
+                                                    const newAnswers = [
+                                                        ...prev,
+                                                    ];
+                                                    newAnswers[
+                                                        currentQuestion
+                                                    ] = answerIndex;
+                                                    return newAnswers;
+                                                })
+                                            }
+                                        />
+                                    </>
+                                )}
+                            </FormCard>
+                            <FormCard title='Get referral'>
+                                <p className='text-sm font-semibold text-stone-400 pt-4'>
+                                    If you feel that you have answered all the
+                                    necessary questions with the most ammount of
+                                    detail, and accuracy, please proceed to the
+                                    next step in order to get the referrals.
+                                </p>
+                                <div className='flex flex-row justify-end pt-2'>
+                                    <Button
+                                        onClick={uploadAllData}
+                                        styleType='primary'
+                                    >
+                                        Get referral
+                                    </Button>
                                 </div>
                             </FormCard>
                         </div>

@@ -48,6 +48,7 @@ export default function Input({
                         value={value}
                         placeholder={label}
                         onChange={handleChange}
+                        className='border border-zinc-400'
                         rows={rows} // Applying rows to textarea
                         {...props}
                     ></textarea>
@@ -62,18 +63,23 @@ export default function Input({
                         value={value}
                         placeholder={label}
                         onChange={handleChange}
+                        className='border border-zinc-400'
                         {...props}
                     />
                 )}
                 {type === "password" && (
                     <span
-                        className="material-symbols-rounded password-icon"
+                        className='material-symbols-rounded password-icon'
                         onClick={togglePassword}
                     >
                         {showPassword ? "visibility_off" : "visibility"}
                     </span>
                 )}
-                {label && <label htmlFor={id}>{label}</label>}
+                {label && (
+                    <label htmlFor={id} className='text-zinc-800'>
+                        {label}
+                    </label>
+                )}
             </div>
         </div>
     );
