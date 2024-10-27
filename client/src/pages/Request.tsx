@@ -114,6 +114,7 @@ export default function RequestPage() {
         const res = await uploadPatientData(allData);
         console.log(res);
         setSpecialties(res);
+        console.log(specialties);
 
         setStep(2);
     }
