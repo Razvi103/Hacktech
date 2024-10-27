@@ -17,7 +17,8 @@ export default function DocumentsPage() {
         }
 
         fetchFiles();
-    }, [getAllFiles]);
+        console.log(files);
+    }, [files, getAllFiles]);
 
     return <div>Documents</div>;
 }
