@@ -1,4 +1,5 @@
 import logging
+from typing import List
 
 from fastapi import APIRouter, Depends, Response, status, Form, UploadFile
 from fastapi.responses import StreamingResponse
@@ -51,17 +52,18 @@ def get_health_report(file_path: str, file_name: str, db=Depends(get_db_session)
     return JSONResponse(content=report_json)
 
 
-@router.post("/get-all-files/", response_model=HealthReportResponse)
+@router.post("/get-all-files/", response_model=List[HealthReportResponse])
 def get_all_files(token: str, db=Depends(get_db_session)):
     reports = db.query(HealthReport).filter_by(user_id=token).all()
     reports_json = []
     for report in reports:
         report_json = {
             "id": report.id,
+            "report_text": report.report_text,
             "file_name": report.file_name,
             "file_path": report.file_path,
             "user_id": report.user_id
         }
         reports_json.append(report_json)
 
-    return JSONResponse(content=json.dumps(reports_json))
+    return reports_json
