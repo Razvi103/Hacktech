@@ -1,5 +1,9 @@
 # MedScan
 
+Scan the QR code below to access our platform:
+
+![QR Code](assets/qrcode.png)
+
 MedScan is an **AI-driven health application** designed to provide personalized specialist recommendations by analyzing users’ health data from various sources. This application helps users make informed decisions and avoid unnecessary stress from unreliable online symptom-checking.
 
 ## Problem Statement
